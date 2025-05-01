@@ -9,7 +9,7 @@ from tkinter import messagebox
 
 window = tk.Tk()
 window.title("Registration")
-window.geometry("275x250")
+window.geometry("275x325")
 window.resizable(False,False)
 
 # Defines the funtion to control the login form and registration forms
@@ -24,20 +24,29 @@ def loginform():
     loginwindow.geometry("250x130")
     loginwindow.resizable(False,False)
 
+    user_label = tk.Label(loginwindow, text="Username").grid(row=0, column=0)
+    user_entry = tk.Entry(loginwindow)
+    user_entry.grid(row=0, column=1)
+
+    tk.Label(loginwindow, text="Password").grid(row=1, column=0)
+    password_entry = tk.Entry(loginwindow, show="*")
+    password_entry.grid(row=1, column=1)
+
+    tk.Button(loginwindow, text="Login", command=ordermenu).grid(row=2, column=1)
+
     def login():
         # Validation for login
         username = user_entry.get()
         password = password_entry.get()
 
         # Checking the file in read mode
-        employeesData = open("employees.txt", "r")
-        # Reading the lines into a list
-        allEmployees = employeesData.readlines()
-        employeesData.close()
-        for each in range(len(employeesData)):
+        with open("employees.txt", "r") as employeesData:
+            allEmployees = employeesData.readlines()
+
+        for each in range(len(allEmployees)):
             if username in allEmployees[each] and password in allEmployees[each]:
                 allInfo = allEmployees[each].split(",")
-                if allInfo[3] == username and allInfor[4].strip("\n") == password:
+                if allInfo[3] == username and allInfor[4].strip() == password:
                     messagebox.showinfo("Success", "Login completed")
                     break
                 else:
@@ -47,15 +56,15 @@ def loginform():
                 messagebox.showerror("Failed", "Login Failed")
                 return
 
-def save_infomation():
+def save_information():
     # Retreive all entries
     fName = fName_entry.get().strip()
     lName = lName_entry.get().strip()
     email = email_entry.get().strip()
     emailCheck = emailCheck_entry.get().strip()
-    username = user_entry.get()
+    username = username_entry.get()
     password = password_entry.get()
-    conpass = conpass.entry.get()
+    conpass = conpass_entry.get()
 
     # See if all entries are completed
     if not fName or not lName or not email or not username or not password or not conpass:
@@ -92,6 +101,68 @@ def save_infomation():
         username_entry.delete(0, tk.END)
         password_entry.delete(0, tk.END)
         conpass_entry.delete(0, tk.END)
+
+def ordermenu():
+    orderwindow = tk.Toplevel()
+    orderwindow.title("Order Menu")
+    orderwindow.geometry("400x300")
+    orderwindow.resizable(False,False)
+
+    cart = {}
+
+    def addcart(itemName, price):
+        cart[itemName] = price
+
+    def checkout():
+        total = 0
+        for key in cart:
+            total = 0
+            print(key, info[key])
+        
+    tk.Button(orderwindow, text="Latte", command=lambda: addcart("Latte", 6.75))
+    lattebutton.grid(row=0, column=0)
+
+    tk.Button(orderwindow, text="Americano", command=lambda: addcart("Americano", 5.25))
+    americanobutton.grid(row=0, column=1)
+
+    tk.Button(orderwindow, text="Expresso", command=lambda: addcart("Expresso", 5.25))
+    expressobutton.grid(row=0, column=2)
+
+    tk.Button(orderwindow, text="Mocha", command=lambda: addcart("Mocha", 6.75))
+    mochabutton.grid(row=1, column=0)
+
+    tk.Button(orderwindow, text="Dirty", command=lambda: addcart("Dirty", 6.75))
+    dirtybutton.grid(row=1, column=1)
+
+    tk.Button(orderwindow, text="Cold Brew", command=lambda: addcart("Cold Brew", 6.75))
+    coldbrewbutton.grid(row=1, column=2)
+
+    tk.Button(orderwindow, text="Cappuccino", command=lambda: addcart("Cappuccino", 7.00))
+    cappuccinobutton.grid(row=2, column=0)
+
+    tk.Button(orderwindow, text="Cocoa", command=lambda: addcart("Cocoa", 5.25))
+    cocoabutton.grid(row=2, column=1)
+
+    tk.Button(orderwindow, text="Black Tea", command=lambda: addcart("Black Tea", 5.25))
+    blackteabutton.grid(row=2, column=2)
+
+    tk.Button(orderwindow, text="Green Tea", command=lambda: addcart("Green Tea", 5.75))
+    greenteabutton.grid(row=3, column=0)
+
+    tk.Button(orderwindow, text="Herbal Tea", command=lambda: addcart("Herbal Tea", 6.75))
+    herbalteabutton.grid(row=3, column=1)
+
+    tk.Button(orderwindow, text="Chia Tea", command=lambda: addcart("Chia Tea", 7.75))
+    chiateabutton.grid(row=3, column=2)
+
+    tk.Button(orderwindow, text="Crossant", command=lambda: addcart("Croissant", 5.25))
+    croissantbutton.pack(row=4, column=0)
+
+    tk.Button(orderwindow, text="Muffin", command=lambda: addcart("Muffin", 6.75))
+    muffinbutton.pack(row=4, column=1)
+
+    tk.Button(orderwindow, text="Cookie", command=lambda: addcart("Cookie", 4.75))
+    cookiebutton.pack(row=5, column=2)
 
 # Creating the labels
 fNamelabel = tk.Label(window, text="First Name", justify="left")
@@ -140,36 +211,10 @@ conpass_entry.grid(row=6, column=1)
 
 # Creating a submit button
 submitButton = tk.Button(window, text="Submit", justify="left", command=save_information)
-submit_button.grid(row=7, column=1, columnspan=2)
+submitButton.grid(row=7, column=1, columnspan=2)
 
 # Button link to login
 login_button = tk.Button(window, text="->", justify="left", command=showlogin)
 login_button.grid(row=7, column=2, columnspan=2)
 
 window.mainloop()
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                
-
-
-
